@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVOTY MASTER - INSTALABLE</title>
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#E65100">
+    <link rel="manifest" href="data:application/manifest+json,{'name':'EvotyMaster','short_name':'Evoty','start_url':'.','display':'standalone','background_color':'#F0F2F5','theme_color':'#E65100'}">
+
+    <style>
+        :root {
+            --naranja: #E65100;
+            --fondo: #F0F2F5;
+            --blanco: #FFFFFF;
+            --texto: #1A1A1A;
+            --verde: #1B5E20;
+            --azul: #0D47A1;
+            --rojo: #B71C1C;
+            --purpura: #4A148C;
+        }
+
+        body { background-color: var(--fondo); color: var(--texto); font-family: 'Arial', sans-serif; margin: 0; padding: 10px; }
+        .header { text-align: center; padding: 15px; background: var(--blanco); border-bottom: 8px solid var(--naranja); margin-bottom: 20px; }
+        .header h1 { color: var(--naranja); margin: 0; font-size: 45px; text-transform: uppercase; }
+
+        .form-master {
+            background: var(--blanco); padding: 25px; border-radius: 15px; max-width: 1300px;
+            margin: 0 auto 30px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .input-box { display: flex; flex-direction: column; flex: 1; min-width: 180px; }
+        .input-box label { font-size: 13px; color: #555; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper::before { content: "₡"; position: absolute; left: 10px; font-size: 20px; font-weight: bold; color: var(--naranja); }
+        
+        input { border: 3px solid #CCC; padding: 12px 12px 12px 35px; border-radius: 8px; font-size: 20px; font-weight: bold; width: 100%; box-sizing: border-box; }
+        input#n { padding-left: 15px; }
+        .input-wrapper.no-simbolo::before { content: ""; }
+
+        .btn-add { background: var(--naranja); color: white; border: none; padding: 20px; border-radius: 10px; font-weight: 900; font-size: 24px; cursor: pointer; width: 100%; margin-top: 10px; }
+
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 20px; max-width: 1600px; margin: 0 auto; }
+        .card { background: var(--blanco); border-radius: 20px; padding: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); border: 2px solid #EEE; margin-bottom:20px; }
+        .card-title { font-size: 35px; color: var(--naranja); font-weight: 900; margin-bottom: 15px; border-bottom: 4px solid #F0F0F0; }
+
+        .pago-resaltado { background: #E3F2FD; border-radius: 15px; padding: 20px; text-align: center; border: 4px solid var(--azul); margin-bottom: 20px; }
+        .pago-resaltado strong { font-size: 50px; color: #000; display: block; }
+
+        .resumen-finanzas { background: #E8F5E9; padding: 15px; border-radius: 12px; margin-bottom: 20px; border-left: 8px solid var(--verde); }
+        .resumen-finanzas div { display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; margin: 5px 0; }
+
+        .stats-grid { font-size: 18px; }
+        .stat-line { border-bottom: 2px solid #F0F0F0; padding: 6px 0; display: flex; justify-content: space-between; }
+
+        .lista-gastos { margin-top: 15px; padding: 12px; background: #F9F9F9; border-radius: 10px; border: 1px solid #DDD; }
+        .extra-item { font-size: 14px; border-bottom: 1px solid #EEE; padding: 4px 0; display: flex; justify-content: space-between; }
+
+        .btn-extra { background: var(--verde); color: white; border: none; padding: 15px; margin-top: 20px; border-radius: 10px; font-size: 20px; font-weight: bold; width: 100%; cursor: pointer; }
+        .card-footer { margin-top: 20px; display: flex; justify-content: space-between; }
+        .mini-btn { padding: 12px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .edit { background: #E0E0E0; color: var(--azul); }
+        .del { background: #FFEBEE; color: var(--rojo); }
+    </style>
+</head>
+<body>
+
+    <div class="header"><h1>MUEBLES EVOTY</h1></div>
+
+    <div class="form-master">
+        <div class="input-box"><label>Nombre Proyecto</label><div class="input-wrapper no-simbolo"><input type="text" id="n" placeholder="Ej: Cocina"></div></div>
+        <div class="input-box"><label>Venta Total</label><div class="input-wrapper"><input type="text" id="v" oninput="f_in(this)"></div></div>
+        <div class="input-box"><label>Melamina</label><div class="input-wrapper"><input type="text" id="m" oninput="f_in(this)"></div></div>
+        <div class="input-box"><label>Herrajes</label><div class="input-wrapper"><input type="text" id="vi" oninput="f_in(this)"></div></div>
+        <div class="input-box"><label>Suministros</label><div class="input-wrapper"><input type="text" id="sum" oninput="f_in(this)"></div></div>
+        <div class="input-box"><label>Gasolina</label><div class="input-wrapper"><input type="text" id="gas" oninput="f_in(this)"></div></div>
+        <div class="input-box"><label>Flete</label><div class="input-wrapper"><input type="text" id="fle" oninput="f_in(this)"></div></div>
+        <div class="input-box" style="flex:0; min-width:100px;"><label>Divisor</label><div class="input-wrapper no-simbolo"><input type="text" id="divi" value="2.9"></div></div>
+        <button class="btn-add" onclick="guardar()">GUARDAR PROYECTO</button>
+    </div>
+
+    <div id="dashboard" class="dashboard"></div>
+
+    <script>
+        const colones = new Intl.NumberFormat('es-CR', { style: 'currency', currency: 'CRC', minimumFractionDigits: 0 });
+        const miles = new Intl.NumberFormat('es-CR', { minimumFractionDigits: 0 });
+
+        function f_in(el) {
+            let num = el.value.replace(/\D/g, "");
+            el.value = num ? miles.format(num) : "";
+        }
+
+        function cl(t) { return Number(t.toString().replace(/\D/g, "")) || 0; }
+
+        function leer() { return JSON.parse(localStorage.getItem('evoty_v19_install')) || []; }
+
+        function guardar() {
+            let n = document.getElementById('n').value;
+            if(!n) return;
+            let lista = leer();
+            lista.push({ 
+                n: n, v: cl(document.getElementById('v').value), 
+                m: cl(document.getElementById('m').value), 
+                vi: cl(document.getElementById('vi').value), 
+                sum: cl(document.getElementById('sum').value),
+                gas: cl(document.getElementById('gas').value),
+                fle: cl(document.getElementById('fle').value),
+                d: Number(document.getElementById('divi').value) || 2.9, 
+                ex: [] 
+            });
+            localStorage.setItem('evoty_v19_install', JSON.stringify(lista));
+            location.reload();
+        }
+
+        function dibujar() {
+            let lista = leer();
+            let h = "";
+            lista.forEach((p, i) => {
+                let sEx = 0; p.ex.forEach(e => { if(!e.esHerraje && !e.esSum) sEx += e.m; });
+                let costoTotal = p.m + p.vi + p.sum + p.gas + p.fle + sEx;
+                let gananciaReal = p.v - costoTotal;
+                let pagoHeiner = gananciaReal / p.d;
+
+                h += `
+                <div class="card">
+                    <div class="card-title">${p.n}</div>
+                    <div class="pago-resaltado">
+                        <span style="color:var(--azul); font-weight:bold; font-size:18px;">PAGO HEINER (Ganancia ÷ ${p.d})</span>
+                        <strong>${colones.format(pagoHeiner)}</strong>
+                    </div>
+                    <div class="resumen-finanzas">
+                        <div style="color:var(--rojo);">GASTO TOTAL: <span>${colones.format(costoTotal)}</span></div>
+                        <div style="color:var(--verde); border-top: 2px solid #ccc; padding-top:5px; margin-top:5px;">GANANCIA: <span>${colones.format(gananciaReal)}</span></div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-line">Venta: <strong>${colones.format(p.v)}</strong></div>
+                        <div class="stat-line">Melamina: <strong>${colones.format(p.m)}</strong></div>
+                        <div class="stat-line">Herrajes Total: <strong>${colones.format(p.vi)}</strong></div>
+                        <div class="stat-line" style="color:var(--purpura)">Suministros: <strong>${colones.format(p.sum)}</strong></div>
+                        <div class="stat-line">Gasolina: <strong>${colones.format(p.gas)}</strong></div>
+                        <div class="stat-line">Flete: <strong>${colones.format(p.fle)}</strong></div>
+                    </div>
+                    <div class="lista-gastos">
+                        <strong>Detalle de extras:</strong><br>
+                        ${p.ex.length > 0 ? p.ex.map(e => `<div class="extra-item"><span>- ${e.d}</span><strong>${colones.format(e.m)}</strong></div>`).join('') : '<small>Sin extras.</small>'}
+                    </div>
+                    <button class="btn-extra" onclick="gasto(${i})">+ AGREGAR GASTO EXTRA</button>
+                    <div class="card-footer">
+                        <button class="mini-btn edit" onclick="editar(${i})">CORREGIR</button>
+                        <button class="mini-btn del" onclick="borrar(${i})">BORRAR</button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('dashboard').innerHTML = h;
+        }
+
+        function gasto(i) {
+            let lista = leer();
+            let d = prompt("¿Qué compró?");
+            if(!d) return;
+            let mIn = prompt("¿Monto? ₡");
+            if(mIn) {
+                let m = cl(mIn);
+                let txt = d.toLowerCase();
+                let esHerraje = txt.includes("herraje") || txt.includes("bisagra") || txt.includes("riel") || txt.includes("esquina") || txt.includes("especiero");
+                let esSum = txt.includes("silicon") || txt.includes("luz") || txt.includes("shiner");
+                if(esHerraje) lista[i].vi += m;
+                else if(esSum) lista[i].sum += m;
+                lista[i].ex.push({d:d, m:m, esHerraje: esHerraje, esSum: esSum});
+                localStorage.setItem('evoty_v19_install', JSON.stringify(lista));
+                dibujar();
+            }
+        }
+
+        function editar(i) {
+            let lista = leer();
+            let p = lista[i];
+            lista[i].n = prompt("Nombre:", p.n) || p.n;
+            lista[i].v = cl(prompt("Venta:", p.v));
+            lista[i].m = cl(prompt("Melamina:", p.m));
+            lista[i].vi = cl(prompt("Herrajes:", p.vi));
+            lista[i].sum = cl(prompt("Suministros:", p.sum));
+            lista[i].gas = cl(prompt("Gasolina:", p.gas));
+            lista[i].fle = cl(prompt("Flete:", p.fle));
+            lista[i].d = Number(prompt("Divisor:", p.d)) || 2.9;
+            localStorage.setItem('evoty_v19_install', JSON.stringify(lista));
+            dibujar();
+        }
+
+        function borrar(i) { if(confirm("¿Eliminar?")) { let lista = leer(); lista.splice(i, 1); localStorage.setItem('evoty_v19_install', JSON.stringify(lista)); dibujar(); } }
+        dibujar();
+
+        // SERVICE WORKER PARA QUE EL NAVEGADOR ACEPTE LA INSTALACIÓN
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIGZ1bmN0aW9uKGV2ZW50KSB7IH0pOw==');
+        }
+    </script>
+</body>
+</html>
